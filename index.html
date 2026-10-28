@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drop.tools-store.com.ua — Кабінет Дропшипера</title>
+  <link rel="icon" href="https://tools-store.com.ua/content/images/2/200x49l90nn0/55542592794744.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .brand-orange { color: #ED5919; }
+    .bg-brand-orange { background-color: #ED5919; }
+    .border-brand-orange { border-color: #ED5919; }
+    .hover-bg-brand-orange:hover { background-color: #db4d12; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    /* Phone frame simulation */
+    .iphone-frame {
+      width: 390px;
+      height: 844px;
+      border: 12px solid #1e293b;
+      border-radius: 54px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
+  <div id="app" v-cloak class="min-h-screen flex flex-col">
+
+    <!-- TOP PRESENTATION BAR (Device Switcher & Live Meta) -->
+    <div class="bg-slate-900 text-white text-xs px-4 py-2 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-50">
+      <div class="flex items-center gap-2">
+        <span class="bg-[#ED5919] text-white px-2 py-0.5 rounded font-black tracking-wider text-[10px]">LIVE DEMO</span>
+        <span class="font-medium text-slate-300">Інтерактивний концепт кабінету для <strong class="text-white">drop.tools-store.com.ua</strong></span>
+      </div>
+
+      <!-- Viewport Mode Toggle -->
+      <div class="flex items-center bg-slate-800 p-0.5 rounded-lg border border-slate-700">
+        <button @click="viewMode = 'desktop'" :class="viewMode === 'desktop' ? 'bg-[#ED5919] text-white shadow' : 'text-slate-400 hover:text-white'" class="px-3 py-1 rounded-md font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-desktop"></i> Desktop версія
+        </button>
+        <button @click="viewMode = 'mobile'" :class="viewMode === 'mobile' ? 'bg-[#ED5919] text-white shadow' : 'text-slate-400 hover:text-white'" class="px-3 py-1 rounded-md font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-mobile-screen"></i> Mobile версія (iPhone Frame)
+        </button>
+      </div>
+
+      <!-- Admin Role Switcher Simulator -->
+      <div class="flex items-center gap-2">
+        <span class="text-slate-400">Режим:</span>
+        <button @click="role = (role === 'drop' ? 'admin' : 'drop')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded text-slate-200 font-medium flex items-center gap-1.5 transition">
+          <i :class="role === 'admin' ? 'fa-solid fa-shield-halved text-[#ED5919]' : 'fa-solid fa-user text-emerald-400'"></i>
+          {{ role === 'admin' ? 'Адміністратор (повний доступ)' : 'Дропшипер (#DP-409)' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTAINER (Desktop or Mobile Wrapper) -->
+    <div :class="viewMode === 'mobile' ? 'py-8 flex justify-center items-center bg-slate-950 flex-1' : 'flex-1 flex flex-col'">
+
+      <!-- IF MOBILE VIEW: iPhone Mockup Shell -->
+      <div v-if="viewMode === 'mobile'" class="iphone-frame bg-white flex flex-col">
+        <!-- Dynamic Island / Speaker notch -->
+        <div class="h-10 bg-slate-900 w-full flex items-end justify-between px-7 pb-1 text-[11px] text-white shrink-0">
+          <span class="font-bold">09:41</span>
+          <div class="w-24 h-4 bg-black rounded-full mx-auto -mt-2"></div>
+          <div class="flex items-center gap-1.5 text-[10px]">
+            <i class="fa-solid fa-signal"></i>
+            <i class="fa-solid fa-wifi"></i>
+            <i class="fa-solid fa-battery-full text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Mobile Scrollable Body -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col bg-slate-50">
+          
+          <!-- Mobile Header -->
+          <div class="bg-slate-900 text-white p-4 border-b border-slate-800">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <div class="bg-[#ED5919] w-7 h-7 rounded-lg flex items-center justify-center font-black text-white text-sm">TS</div>
+                <div>
+                  <h1 class="font-black text-sm tracking-tight leading-none">TOOLS STORE</h1>
+                  <span class="text-[9px] text-[#ED5919] font-bold tracking-wider">DROP PORTAL</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sheets Live
+                </span>
+              </div>
+            </div>
+
+            <!-- Month select & quick info -->
+            <div class="flex items-center justify-between text-xs bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+              <div class="flex items-center gap-1.5">
+                <i class="fa-regular fa-calendar text-[#ED5919]"></i>
+                <select v-model="selectedMonth" class="bg-transparent font-semibold text-white focus:outline-none cursor-pointer">
+                  <option class="bg-slate-900" value="10-2026">Жовтень 2026</option>
+                  <option class="bg-slate-900" value="09-2026">Вересень 2026</option>
+                  <option class="bg-slate-900" value="08-2026">Серпень 2026</option>
+                </select>
+              </div>
+              <button v-if="role === 'admin'" @click="openSheetModal = true" class="text-[10px] bg-[#ED5919] hover-bg-brand-orange text-white px-2 py-1 rounded font-bold">
+                + Таблиця
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile Content Area -->
+          <div class="p-3 space-y-3">
+            <!-- Balance Card -->
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+              <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Поточний баланс до виплати</div>
+              <div class="flex items-baseline justify-between mb-3">
+                <div class="text-2xl font-extrabold text-slate-900">{{ formatMoney(balance) }} ₴</div>
+                <button @click="openPayoutModal = true" class="bg-[#ED5919] hover-bg-brand-orange text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                  Вивести
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
+                <div>
+                  <span class="text-slate-400 block text-[10px]">Заробіток (Жовтень)</span>
+                  <strong class="text-emerald-600 font-bold">+{{ formatMoney(totalProfit) }} ₴</strong>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[10px]">Вже виплачено</span>
+                  <strong class="text-slate-700 font-bold">{{ formatMoney(paidOut) }} ₴</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bonus Tracker -->
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-3 shadow-sm text-xs">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold flex items-center gap-1.5">
+                  <i class="fa-solid fa-fire text-[#ED5919]"></i> Бонус за оборот
+                </span>
+                <span class="text-[#ED5919] font-black">+3 000 ₴</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 mb-1.5 overflow-hidden">
+                <div class="bg-[#ED5919] h-2 rounded-full transition-all duration-500" :style="{ width: bonusProgress + '%' }"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>Оборот: {{ formatMoney(totalTurnover) }} ₴</span>
+                <span>Мета: 150 000 ₴ ({{ bonusProgress }}%)</span>
+              </div>
+            </div>
+
+            <!-- Reconciliation Header -->
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <h3 class="font-black text-sm text-slate-900">Щомісячна звірка</h3>
+                <span class="text-[10px] text-slate-500">Звірено {{ verifiedCount }} з {{ orders.length }} замовлень</span>
+              </div>
+              <button @click="openCloseMonthModal = true" class="text-xs bg-slate-900 text-white font-bold px-2.5 py-1.5 rounded-lg">
+                Закрити місяць
+              </button>
+            </div>
+
+            <!-- Mobile Orders Cards -->
+            <div class="space-y-2.5">
+              <div v-for="order in orders" :key="order.id" 
+                   :class="order.verified ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200 bg-white'"
+                   class="rounded-xl p-3 border shadow-sm transition">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" v-model="order.verified" class="w-4 h-4 text-[#ED5919] rounded border-slate-300 focus:ring-[#ED5919]">
+                    <span class="font-black text-xs text-slate-900">{{ order.orderNumber }}</span>
+                    <span class="text-[10px] text-slate-400">{{ order.date }}</span>
+                  </div>
+                  <span :class="getStatusBadgeClass(order.status)" class="text-[9px] font-bold px-2 py-0.5 rounded-full">
+                    {{ order.status }}
+                  </span>
+                </div>
+
+                <div class="text-xs font-bold text-slate-800 line-clamp-1 mb-2">{{ order.product }}</div>
+
+                <div class="grid grid-cols-3 gap-1 bg-slate-50 p-2 rounded-lg text-[10px] mb-2 border border-slate-100">
+                  <div>
+                    <span class="text-slate-400 block">Дроп</span>
+                    <strong class="font-bold text-slate-700">{{ formatMoney(order.dropPrice) }} ₴</strong>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block">Продаж</span>
+                    <strong class="font-bold text-slate-900">{{ formatMoney(order.salePrice) }} ₴</strong>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-slate-400 block">Заробіток</span>
+                    <strong :class="order.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'" class="font-extrabold">
+                      {{ order.profit >= 0 ? '+' : '' }}{{ formatMoney(order.profit) }} ₴
+                    </strong>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between text-[10px] text-slate-500">
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-truck-fast text-slate-400"></i> ТТН: 
+                    <span class="font-mono text-slate-700 font-semibold">{{ order.ttn }}</span>
+                  </span>
+                  <span :class="order.verified ? 'text-emerald-600 font-bold' : 'text-amber-600 font-bold'">
+                    <i :class="order.verified ? 'fa-solid fa-circle-check' : 'fa-regular fa-clock'"></i>
+                    {{ order.verified ? 'Звірено' : 'Не звірено' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mobile Bottom Sticky Navigation -->
+          <div class="mt-auto bg-white border-t border-slate-200 p-2 grid grid-cols-4 text-center text-[10px] shrink-0 sticky bottom-0 z-10">
+            <button class="text-[#ED5919] font-bold flex flex-col items-center gap-1">
+              <i class="fa-solid fa-list-check text-sm"></i> Замовлення
+            </button>
+            <button class="text-slate-400 hover:text-slate-700 font-medium flex flex-col items-center gap-1">
+              <i class="fa-solid fa-wallet text-sm"></i> Фінанси
+            </button>
+            <button class="text-slate-400 hover:text-slate-700 font-medium flex flex-col items-center gap-1">
+              <i class="fa-solid fa-chart-line text-sm"></i> Аналітика
+            </button>
+            <button class="text-slate-400 hover:text-slate-700 font-medium flex flex-col items-center gap-1">
+              <i class="fa-solid fa-gear text-sm"></i> Профіль
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- IF DESKTOP VIEW: Full Wide Dashboard -->
+      <div v-else class="flex-1 flex flex-col">
+        
+        <!-- Desktop Header matching tools-store.com.ua -->
+        <header class="bg-[#171717] text-white border-b border-slate-800 sticky top-10 z-40">
+          <div class="max-w-7xl mx-auto px-6 h-18 py-3.5 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-[#ED5919] text-white font-black text-xl px-3 py-1 rounded-lg tracking-tighter">
+                  TS
+                </div>
+                <div>
+                  <div class="font-black text-lg tracking-tight leading-none text-white flex items-center gap-2">
+                    TOOLS STORE
+                    <span class="bg-[#ED5919]/20 text-[#ED5919] text-[10px] font-black uppercase px-2 py-0.5 rounded border border-[#ED5919]/30">
+                      B2B ДРОПШИПІНГ
+                    </span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium tracking-wide">drop.tools-store.com.ua</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle: Live Google Sheets Sync Status & Month Select -->
+            <div class="flex items-center gap-3">
+              <!-- Sync Status -->
+              <div class="bg-slate-800/80 border border-slate-700/80 rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span class="text-slate-300">Google Sheets:</span>
+                <strong class="text-emerald-400 font-semibold flex items-center gap-1">
+                  Синхронізовано (0.1с)
+                </strong>
+              </div>
+
+              <!-- Month Switcher -->
+              <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white">
+                <i class="fa-regular fa-calendar-days text-[#ED5919] mr-2"></i>
+                <select v-model="selectedMonth" class="bg-transparent font-bold focus:outline-none cursor-pointer">
+                  <option class="bg-slate-900 text-white" value="10-2026">Жовтень 2026 (Поточний)</option>
+                  <option class="bg-slate-900 text-white" value="09-2026">Вересень 2026 (Закритий)</option>
+                  <option class="bg-slate-900 text-white" value="08-2026">Серпень 2026 (Закритий)</option>
+                </select>
+              </div>
+
+              <!-- Add Google Sheet (Admin Feature) -->
+              <button v-if="role === 'admin'" @click="openSheetModal = true" class="bg-[#ED5919] hover-bg-brand-orange text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition">
+                <i class="fa-solid fa-plus"></i> Підключити місяць
+              </button>
+            </div>
+
+            <!-- Right: User / Dropshipper Profile -->
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <div class="text-xs font-bold text-white flex items-center justify-end gap-1.5">
+                  {{ role === 'admin' ? 'Роман Смолюх (Адмін)' : 'Максим Ковальчук' }}
+                  <span class="bg-emerald-500/20 text-emerald-400 text-[10px] px-1.5 py-0.2 rounded font-bold">Активний</span>
+                </div>
+                <span class="text-[11px] text-slate-400">ID: DP-409 | tools.drop@gmail.com</span>
+              </div>
+              <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold text-sm">
+                <i class="fa-regular fa-user"></i>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Desktop Content -->
+        <main class="max-w-7xl mx-auto px-6 py-6 w-full flex-1 space-y-6">
+
+          <!-- 1. FINANCIAL SUMMARY KPI CARDS (Взаєморозрахунки та фінанси) -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            
+            <!-- Card 1: Balance -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 relative overflow-hidden">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Поточний баланс</span>
+                <span class="p-2 rounded-lg bg-orange-50 text-[#ED5919] text-sm"><i class="fa-solid fa-wallet"></i></span>
+              </div>
+              <div class="text-3xl font-black text-slate-900 tracking-tight mb-2">{{ formatMoney(balance) }} ₴</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                  <i class="fa-solid fa-circle-check"></i> Доступно до виплати
+                </span>
+                <button @click="openPayoutModal = true" class="bg-[#ED5919] hover-bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-lg transition shadow-sm">
+                  Замовити виплату
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Profit -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Заробіток дропшипера</span>
+                <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600 text-sm"><i class="fa-solid fa-arrow-trend-up"></i></span>
+              </div>
+              <div class="text-3xl font-black text-emerald-600 tracking-tight mb-2">+{{ formatMoney(totalProfit) }} ₴</div>
+              <div class="text-xs text-slate-500">
+                За жовтень • <strong>{{ orders.length }}</strong> замовлень
+              </div>
+            </div>
+
+            <!-- Card 3: Paid out & Debt -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Вже виплачено</span>
+                <span class="p-2 rounded-lg bg-blue-50 text-blue-600 text-sm"><i class="fa-solid fa-receipt"></i></span>
+              </div>
+              <div class="text-3xl font-black text-slate-900 tracking-tight mb-2">{{ formatMoney(paidOut) }} ₴</div>
+              <div class="text-xs text-slate-500 flex items-center justify-between">
+                <span>Взаєморозрахунки:</span>
+                <strong class="text-slate-800 font-bold">Борг 0 ₴ (Розраховано)</strong>
+              </div>
+            </div>
+
+            <!-- Card 4: Bonus Progress -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Бонус за оборот</span>
+                  <span class="bg-[#ED5919] text-white text-[10px] font-black px-2 py-0.5 rounded-full">+3 000 ₴</span>
+                </div>
+                <div class="text-lg font-black text-white mb-2">
+                  {{ formatMoney(totalTurnover) }} ₴ <span class="text-xs font-normal text-slate-400">/ 150 000 ₴</span>
+                </div>
+              </div>
+              <div>
+                <div class="w-full bg-slate-700/80 rounded-full h-2 mb-1.5 overflow-hidden">
+                  <div class="bg-[#ED5919] h-2 rounded-full transition-all duration-500" :style="{ width: bonusProgress + '%' }"></div>
+                </div>
+                <span class="text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>Прогрес: <strong>{{ bonusProgress }}%</strong></span>
+                  <span>Залишилось <strong>{{ formatMoney(150000 - totalTurnover) }} ₴</strong></span>
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 2. MONTHLY RECONCILIATION BAR (Щомісячна звірка — ключовий розділ ТЗ) -->
+          <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-orange-100/70 border border-orange-200 flex items-center justify-center text-[#ED5919] text-xl">
+                <i class="fa-solid fa-clipboard-check"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-base font-extrabold text-slate-900">Щомісячна звірка замовлень</h2>
+                  <span class="bg-slate-100 text-slate-700 font-bold text-xs px-2.5 py-0.5 rounded-full border border-slate-200">
+                    {{ selectedMonthText }}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  Перевірте кожне замовлення окремо. Після звірки закрийте звітний місяць для фіксації фінансового підсумку.
+                </p>
+              </div>
+            </div>
+
+            <!-- Actions & Progress -->
+            <div class="flex items-center gap-4">
+              <div class="text-right">
+                <div class="text-xs text-slate-500 font-medium">Стан перевірки:</div>
+                <div class="text-sm font-black text-slate-800">
+                  <span class="text-emerald-600">{{ verifiedCount }}</span> з {{ orders.length }} замовлень звірено
+                </div>
+              </div>
+
+              <!-- Close month button -->
+              <button @click="openCloseMonthModal = true" class="bg-slate-900 hover:bg-black text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                <i class="fa-solid fa-lock"></i> Закрити місяць та зафіксувати
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. ORDERS TABLE WITH GOOGLE SHEETS LIVE SYNC -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            
+            <!-- Table Toolbar -->
+            <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-800">Список замовлень з Google Sheets</span>
+                <span class="bg-slate-200 text-slate-700 text-xs font-bold px-2 py-0.5 rounded-full">{{ filteredOrders.length }}</span>
+              </div>
+
+              <!-- Filter tabs -->
+              <div class="flex items-center gap-2 text-xs">
+                <button @click="filter = 'all'" :class="filter === 'all' ? 'bg-[#ED5919] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg font-bold border border-slate-200 transition">
+                  Всі ({{ orders.length }})
+                </button>
+                <button @click="filter = 'unverified'" :class="filter === 'unverified' ? 'bg-[#ED5919] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg font-bold border border-slate-200 transition">
+                  Потребують звірки ({{ unverifiedCount }})
+                </button>
+                <button @click="filter = 'verified'" :class="filter === 'verified' ? 'bg-[#ED5919] text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-3 py-1.5 rounded-lg font-bold border border-slate-200 transition">
+                  Звірено ({{ verifiedCount }})
+                </button>
+              </div>
+
+              <!-- Search -->
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                <input v-model="search" type="text" placeholder="Пошук замовлення, ТТН, товару..." class="pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[#ED5919] w-64">
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100/70 text-slate-600 uppercase font-bold text-[11px] border-b border-slate-200">
+                    <th class="py-3 px-4 w-12 text-center">
+                      <span title="Звірено">Звірка</span>
+                    </th>
+                    <th class="py-3 px-4">№ Замовлення & Дата</th>
+                    <th class="py-3 px-4">Товар (Tools Store)</th>
+                    <th class="py-3 px-4 text-right">Ціна продажу</th>
+                    <th class="py-3 px-4 text-right">Дроп-ціна</th>
+                    <th class="py-3 px-4 text-right">Заробіток</th>
+                    <th class="py-3 px-4">Номер ТТН</th>
+                    <th class="py-3 px-4">Статус доставки</th>
+                    <th class="py-3 px-4">Оплата</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr v-for="order in filteredOrders" :key="order.id" 
+                      :class="order.verified ? 'bg-emerald-50/15' : 'hover:bg-slate-50'"
+                      class="transition">
+                    
+                    <!-- Checkbox Звірено -->
+                    <td class="py-3.5 px-4 text-center">
+                      <input type="checkbox" v-model="order.verified" class="w-4 h-4 text-[#ED5919] rounded border-slate-300 focus:ring-[#ED5919] cursor-pointer">
+                    </td>
+
+                    <!-- Order Number & Date -->
+                    <td class="py-3.5 px-4">
+                      <div class="font-black text-slate-900">{{ order.orderNumber }}</div>
+                      <div class="text-[11px] text-slate-400">{{ order.date }}</div>
+                    </td>
+
+                    <!-- Product -->
+                    <td class="py-3.5 px-4 max-w-xs">
+                      <div class="font-bold text-slate-800 truncate" :title="order.product">{{ order.product }}</div>
+                      <div class="text-[11px] text-slate-400">Код: {{ order.sku }} • 1 шт</div>
+                    </td>
+
+                    <!-- Sale Price -->
+                    <td class="py-3.5 px-4 text-right font-semibold text-slate-800">
+                      {{ formatMoney(order.salePrice) }} ₴
+                    </td>
+
+                    <!-- Drop Price -->
+                    <td class="py-3.5 px-4 text-right text-slate-500 font-medium">
+                      {{ formatMoney(order.dropPrice) }} ₴
+                    </td>
+
+                    <!-- Profit -->
+                    <td class="py-3.5 px-4 text-right">
+                      <span :class="order.profit >= 0 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : 'text-rose-600 bg-rose-50 border-rose-200'" class="px-2 py-0.5 rounded font-extrabold border">
+                        {{ order.profit >= 0 ? '+' : '' }}{{ formatMoney(order.profit) }} ₴
+                      </span>
+                    </td>
+
+                    <!-- TTN -->
+                    <td class="py-3.5 px-4">
+                      <div class="flex items-center gap-1.5 font-mono text-slate-700 font-medium">
+                        <i class="fa-solid fa-truck text-slate-400 text-[10px]"></i>
+                        {{ order.ttn }}
+                      </div>
+                    </td>
+
+                    <!-- Delivery Status -->
+                    <td class="py-3.5 px-4">
+                      <span :class="getStatusBadgeClass(order.status)" class="text-[11px] font-bold px-2.5 py-1 rounded-full inline-block">
+                        {{ order.status }}
+                      </span>
+                    </td>
+
+                    <!-- Payment Status -->
+                    <td class="py-3.5 px-4 text-slate-600 font-medium">
+                      <span v-if="order.payment === 'Післяплата'" class="flex items-center gap-1 text-slate-600">
+                        <i class="fa-regular fa-money-bill-1 text-amber-500"></i> Післяплата
+                      </span>
+                      <span v-else class="flex items-center gap-1 text-emerald-600 font-semibold">
+                        <i class="fa-solid fa-credit-card"></i> Оплата на IBAN
+                      </span>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer Totals -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-600">
+              <div>
+                Показано <strong>{{ filteredOrders.length }}</strong> із <strong>{{ orders.length }}</strong> замовлень
+              </div>
+              <div class="flex items-center gap-6 font-bold">
+                <span>Оборот вибірки: <strong class="text-slate-900">{{ formatMoney(filteredTurnover) }} ₴</strong></span>
+                <span>Заробіток вибірки: <strong class="text-emerald-600">+{{ formatMoney(filteredProfit) }} ₴</strong></span>
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+      </div>
+
+    </div>
+
+    <!-- MODAL 1: Connect Monthly Google Sheet (Admin Feature) -->
+    <div v-if="openSheetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="p-2 rounded-lg bg-orange-100 text-[#ED5919]"><i class="fa-solid fa-table"></i></span>
+            <h3 class="font-extrabold text-base text-slate-900">Підключити Google Таблицю на новий місяць</h3>
+          </div>
+          <button @click="openSheetModal = false" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+
+        <p class="text-xs text-slate-500 mb-4">
+          Вставте посилання на нову Google-таблицю. Система автоматично зіставить стовпчики замовлень, налаштує Apps Script вебхук та підтягне дані без редагування вихідного коду.
+        </p>
+
+        <div class="space-y-3 text-xs mb-6">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Звітний період:</label>
+            <div class="grid grid-cols-2 gap-2">
+              <select class="bg-slate-50 border border-slate-200 rounded-lg p-2 font-semibold">
+                <option>Листопад</option>
+                <option>Грудень</option>
+                <option>Січень</option>
+              </select>
+              <select class="bg-slate-50 border border-slate-200 rounded-lg p-2 font-semibold">
+                <option>2026</option>
+                <option>2027</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Посилання на Google Sheets (або ID таблиці):</label>
+            <input type="text" placeholder="https://docs.google.com/spreadsheets/d/1BxiMVs0XR..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-mono text-xs focus:outline-none focus:border-[#ED5919]">
+          </div>
+
+          <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 text-emerald-800 text-[11px] flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+            <span>Автоматична перевірка колонок: <strong>Дата, Замовлення, Дроп-ціна, Продаж, ТТН, Статус</strong></span>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 text-xs font-bold">
+          <button @click="openSheetModal = false" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">Скасувати</button>
+          <button @click="addNewSheet" class="px-4 py-2 rounded-lg bg-[#ED5919] hover-bg-brand-orange text-white">Підключити та імпортувати</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: Request Payout -->
+    <div v-if="openPayoutModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+          <h3 class="font-extrabold text-base text-slate-900">Запит на виплату коштів</h3>
+          <button @click="openPayoutModal = false" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs mb-4">
+          <span class="text-slate-500 block">Доступна сума до виплати:</span>
+          <span class="text-2xl font-black text-slate-900">{{ formatMoney(balance) }} ₴</span>
+        </div>
+
+        <div class="space-y-3 text-xs mb-6">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Сума виплати (грн):</label>
+            <input type="number" :max="balance" :value="balance" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-bold text-sm focus:outline-none focus:border-[#ED5919]">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Номер картки або IBAN отримувача:</label>
+            <input type="text" placeholder="UA000000000000000000000000000" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-mono text-xs focus:outline-none focus:border-[#ED5919]">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 text-xs font-bold">
+          <button @click="openPayoutModal = false" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-600">Скасувати</button>
+          <button @click="submitPayout" class="px-4 py-2 rounded-lg bg-[#ED5919] hover-bg-brand-orange text-white">Відправити заявку</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: Close Month Confirmation -->
+    <div v-if="openCloseMonthModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 text-center">
+        <div class="w-14 h-14 rounded-full bg-orange-100 text-[#ED5919] text-2xl flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-1">Закрити місяць Жовтень 2026?</h3>
+        <p class="text-xs text-slate-500 mb-4">
+          Усі звірені замовлення ({{ verifiedCount }} шт) будуть намертво зафіксовані в архівній базі. Будь-які подальші випадкові зміни в Google Sheets більше не впливатимуть на цей розрахований баланс.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs mb-5 text-left space-y-1">
+          <div class="flex justify-between"><span>Підсумковий оборот:</span> <strong class="font-bold">{{ formatMoney(totalTurnover) }} ₴</strong></div>
+          <div class="flex justify-between"><span>Фінальний заробіток:</span> <strong class="font-bold text-emerald-600">+{{ formatMoney(totalProfit) }} ₴</strong></div>
+          <div class="flex justify-between"><span>Бонус за місяць:</span> <strong class="font-bold text-[#ED5919]">+3 000 ₴ (Виконано)</strong></div>
+        </div>
+        <div class="flex justify-center gap-2 text-xs font-bold">
+          <button @click="openCloseMonthModal = false" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-600">Повернутися</button>
+          <button @click="confirmCloseMonth" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white">Підтвердити закриття</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const viewMode = ref('desktop'); // 'desktop' or 'mobile'
+        const role = ref('drop'); // 'drop' or 'admin'
+        const selectedMonth = ref('10-2026');
+        const filter = ref('all');
+        const search = ref('');
+
+        const openSheetModal = ref(false);
+        const openPayoutModal = ref(false);
+        const openCloseMonthModal = ref(false);
+
+        const balance = ref(18450);
+        const paidOut = ref(11350);
+
+        // Orders List with real Tools Store items
+        const orders = ref([
+          {
+            id: 1,
+            orderNumber: '#TS-91024',
+            date: '28.10.2026 11:40',
+            product: 'Акумуляторний шуруповерт Makita DDF485Z (без АКБ)',
+            sku: '184920',
+            salePrice: 4299,
+            dropPrice: 3150,
+            profit: 1149,
+            ttn: '20450948291048',
+            status: 'Отримано',
+            payment: 'Післяплата',
+            verified: true
+          },
+          {
+            id: 2,
+            orderNumber: '#TS-91019',
+            date: '28.10.2026 09:15',
+            product: 'Кутова шліфмашина DeWalt DWE4257 регулювання обертів',
+            sku: '229102',
+            salePrice: 6150,
+            dropPrice: 4800,
+            profit: 1350,
+            ttn: '20450948281192',
+            status: 'Отримано',
+            payment: 'Оплата на IBAN',
+            verified: true
+          },
+          {
+            id: 3,
+            orderNumber: '#TS-90988',
+            date: '27.10.2026 17:30',
+            product: 'Перфоратор бочковий Bosch Professional GBH 2-28 F',
+            sku: '109844',
+            salePrice: 7900,
+            dropPrice: 6200,
+            profit: 1700,
+            ttn: '20450948270034',
+            status: 'У відділенні',
+            payment: 'Післяплата',
+            verified: false
+          },
+          {
+            id: 4,
+            orderNumber: '#TS-90972',
+            date: '27.10.2026 14:10',
+            product: 'Професійний набір інструменту Stanley 142 предмети',
+            sku: '554109',
+            salePrice: 6850,
+            dropPrice: 5400,
+            profit: 1450,
+            ttn: '20450948259110',
+            status: 'Отримано',
+            payment: 'Післяплата',
+            verified: true
+          },
+          {
+            id: 5,
+            orderNumber: '#TS-90961',
+            date: '26.10.2026 18:45',
+            product: 'Лазерний рівень 3D DeWalt DCE089D1G зелений промінь',
+            sku: '883011',
+            salePrice: 17999,
+            dropPrice: 14200,
+            profit: 3799,
+            ttn: '20450948243881',
+            status: 'В дорозі',
+            payment: 'Оплата на IBAN',
+            verified: false
+          },
+          {
+            id: 6,
+            orderNumber: '#TS-90945',
+            date: '26.10.2026 12:20',
+            product: 'Зварювальний напівавтомат інверторний Dnipro-M SAB-310',
+            sku: '331092',
+            salePrice: 10999,
+            dropPrice: 8900,
+            profit: -150, // Відмова, повернення за доставку
+            ttn: '20450948211993',
+            status: 'Відмова / Повернення',
+            payment: 'Післяплата',
+            verified: true
+          },
+          {
+            id: 7,
+            orderNumber: '#TS-90930',
+            date: '25.10.2026 16:05',
+            product: 'Пила торцювальна мережева Makita LS1018LN 1430 Вт',
+            sku: '449102',
+            salePrice: 16500,
+            dropPrice: 13400,
+            profit: 3100,
+            ttn: '20450948199201',
+            status: 'Отримано',
+            payment: 'Післяплата',
+            verified: true
+          },
+          {
+            id: 8,
+            orderNumber: '#TS-90912',
+            date: '25.10.2026 10:50',
+            product: 'Акумуляторний гайковерт DeWalt DCF899N 950 Нм',
+            sku: '661049',
+            salePrice: 9400,
+            dropPrice: 7500,
+            profit: 1900,
+            ttn: '20450948177402',
+            status: 'Отримано',
+            payment: 'Оплата на IBAN',
+            verified: true
+          }
+        ]);
+
+        const selectedMonthText = computed(() => {
+          if (selectedMonth.value === '10-2026') return 'Жовтень 2026';
+          if (selectedMonth.value === '09-2026') return 'Вересень 2026';
+          return 'Серпень 2026';
+        });
+
+        const verifiedCount = computed(() => orders.value.filter(o => o.verified).length);
+        const unverifiedCount = computed(() => orders.value.filter(o => !o.verified).length);
+
+        const totalProfit = computed(() => orders.value.reduce((acc, o) => acc + o.profit, 0));
+        const totalTurnover = computed(() => orders.value.reduce((acc, o) => acc + o.salePrice, 0));
+
+        const bonusProgress = computed(() => Math.min(100, Math.round((totalTurnover.value / 150000) * 100)));
+
+        const filteredOrders = computed(() => {
+          return orders.value.filter(order => {
+            if (filter.value === 'verified' && !order.verified) return false;
+            if (filter.value === 'unverified' && order.verified) return false;
+            if (search.value) {
+              const q = search.value.toLowerCase();
+              return order.orderNumber.toLowerCase().includes(q) ||
+                     order.product.toLowerCase().includes(q) ||
+                     order.ttn.includes(q);
+            }
+            return true;
+          });
+        });
+
+        const filteredProfit = computed(() => filteredOrders.value.reduce((acc, o) => acc + o.profit, 0));
+        const filteredTurnover = computed(() => filteredOrders.value.reduce((acc, o) => acc + o.salePrice, 0));
+
+        const formatMoney = (val) => new Intl.NumberFormat('uk-UA').format(val);
+
+        const getStatusBadgeClass = (status) => {
+          switch (status) {
+            case 'Отримано': return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+            case 'В дорозі': return 'bg-blue-100 text-blue-800 border border-blue-200';
+            case 'У відділенні': return 'bg-amber-100 text-amber-800 border border-amber-200';
+            case 'Відмова / Повернення': return 'bg-rose-100 text-rose-800 border border-rose-200';
+            default: return 'bg-slate-100 text-slate-700';
+          }
+        };
+
+        const addNewSheet = () => {
+          alert('Таблиця успішно перевірена! Знайдено 42 нових замовлення. Дані імпортовано в PostgreSQL.');
+          openSheetModal.value = false;
+        };
+
+        const submitPayout = () => {
+          alert('Заявку на виплату відправлено адміністратору. Статус оновлено в журналі транзакцій.');
+          openPayoutModal.value = false;
+        };
+
+        const confirmCloseMonth = () => {
+          alert('Місяць Жовтень 2026 успішно закрито! Фінансові підсумки зафіксовано в базі.');
+          openCloseMonthModal.value = false;
+        };
+
+        return {
+          viewMode,
+          role,
+          selectedMonth,
+          selectedMonthText,
+          filter,
+          search,
+          orders,
+          filteredOrders,
+          verifiedCount,
+          unverifiedCount,
+          totalProfit,
+          totalTurnover,
+          filteredProfit,
+          filteredTurnover,
+          bonusProgress,
+          balance,
+          paidOut,
+          openSheetModal,
+          openPayoutModal,
+          openCloseMonthModal,
+          formatMoney,
+          getStatusBadgeClass,
+          addNewSheet,
+          submitPayout,
+          confirmCloseMonth
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
