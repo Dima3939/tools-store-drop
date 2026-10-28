@@ -17,9 +17,6 @@
     .brand-btn { background-color: #ED5919; color: #fff; }
     .brand-btn:hover { background-color: #d64d12; }
     .nowrap { white-space: nowrap !important; }
-    /* Hide scrollbar for clean horizontal tab scrolling */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col">
@@ -82,31 +79,31 @@
       <!-- Container: Desktop or Mobile simulator width -->
       <div :class="isMobileSim ? 'w-full max-w-[420px] bg-[#f1f4f8] rounded-3xl shadow-2xl border border-slate-700 flex flex-col overflow-hidden' : 'max-w-[1480px] mx-auto px-4 sm:px-6 py-6 flex flex-col space-y-5'">
 
-        <!-- 2. SUB-HEADER TOOLBAR (Proper responsive layout, zero collisions) -->
-        <div class="flex flex-col gap-3" :class="isMobileSim ? 'p-4 pb-2' : 'lg:flex-row lg:items-center lg:justify-between'">
-          
+        <!-- 2. SUB-HEADER TOOLBAR -->
+        <div :class="isMobileSim ? 'p-4 pb-2 flex flex-col gap-3' : 'flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4'">
           <div>
             <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-tight">Кабінет замовлень та взаєморозрахунків</h1>
             <p class="text-xs text-slate-500 mt-1">Синхронізація щомісячних Google-таблиць, облік виплат та фінансова аналітика</p>
           </div>
 
           <!-- Controls: Month Selector + Add Sheet Action -->
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-            <div class="flex items-center bg-white border border-slate-300 rounded-lg px-3 py-2 shadow-sm text-xs">
-              <i class="fa-regular fa-calendar-days text-[#ED5919] mr-2 shrink-0"></i>
-              <label class="text-slate-500 mr-2 font-medium shrink-0">Період:</label>
-              <select v-model="selectedMonth" class="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer w-full">
+          <div :class="isMobileSim ? 'flex flex-col gap-2 w-full' : 'flex flex-wrap items-center gap-2.5'">
+            <div class="flex items-center bg-white border border-slate-300 rounded-lg px-3 py-2 shadow-sm text-xs" :class="isMobileSim ? 'w-full justify-between' : ''">
+              <div class="flex items-center">
+                <i class="fa-regular fa-calendar-days text-[#ED5919] mr-2 shrink-0"></i>
+                <label class="text-slate-500 mr-2 font-medium shrink-0">Період:</label>
+              </div>
+              <select v-model="selectedMonth" class="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer">
                 <option value="10-2026">Жовтень 2026 (Поточний)</option>
                 <option value="09-2026">Вересень 2026 (Закритий)</option>
                 <option value="08-2026">Серпень 2026 (Закритий)</option>
               </select>
             </div>
 
-            <button @click="openSheetModal = true" class="text-xs bg-white hover:bg-slate-50 text-slate-800 font-bold border border-slate-300 px-3.5 py-2 rounded-lg flex items-center justify-center gap-2 shadow-sm transition nowrap">
+            <button @click="openSheetModal = true" class="text-xs bg-white hover:bg-slate-50 text-slate-800 font-bold border border-slate-300 px-3.5 py-2 rounded-lg flex items-center justify-center gap-2 shadow-sm transition nowrap" :class="isMobileSim ? 'w-full' : ''">
               <i class="fa-solid fa-table-cells text-[#ED5919]"></i> + Підключити нову таблицю (Sheets)
             </button>
           </div>
-
         </div>
 
         <!-- 3. TOP KPI STATS BAR (Financial & Operational Summary) -->
@@ -163,21 +160,21 @@
 
         <!-- 4. RECONCILIATION & ACTION BAR (Stacked on mobile, side-by-side on desktop) -->
         <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm p-4 sm:p-5" :class="isMobileSim ? 'mx-4' : ''">
-          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div :class="isMobileSim ? 'flex flex-col gap-3.5' : 'flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4'">
             
-            <!-- Left Info -->
-            <div class="flex items-start sm:items-center gap-3.5">
-              <div class="w-10 h-10 rounded-lg bg-orange-50 border border-orange-200/80 flex items-center justify-center text-[#ED5919] text-base shrink-0 mt-0.5 sm:mt-0">
+            <!-- Left Info Block -->
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-lg bg-orange-50 border border-orange-200/80 flex items-center justify-center text-[#ED5919] text-base shrink-0 mt-0.5">
                 <i class="fa-solid fa-clipboard-check"></i>
               </div>
-              <div>
+              <div class="flex-1 min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
-                  <h2 class="text-sm font-bold text-slate-900">Щомісячна звірка замовлень</h2>
+                  <h2 class="text-sm font-bold text-slate-900 leading-tight">Щомісячна звірка замовлень</h2>
                   <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded font-semibold border border-slate-200 nowrap">
                     {{ selectedMonthText }}
                   </span>
                 </div>
-                <div class="text-xs text-slate-500 mt-1">
+                <div class="text-xs text-slate-500 mt-1 leading-normal">
                   Звірено: <strong class="text-emerald-700 font-bold">{{ verifiedCount }}</strong> з {{ orders.length }} замовлень 
                   <span v-if="unverifiedCount > 0" class="text-amber-600 font-semibold ml-1">({{ unverifiedCount }} очікують перевірки)</span>
                   <span v-else class="text-emerald-600 font-semibold ml-1">(всі замовлення перевірено)</span>
@@ -185,12 +182,12 @@
               </div>
             </div>
 
-            <!-- Action buttons: Stack vertically on mobile, horizontal on desktop -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
-              <button @click="markAllVerified" class="text-xs bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium px-4 py-2.5 rounded-lg transition nowrap shadow-sm text-center justify-center">
+            <!-- Action buttons: Stack vertically on mobile simulator, horizontal on desktop -->
+            <div :class="isMobileSim ? 'flex flex-col gap-2 w-full pt-1' : 'flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto'">
+              <button @click="markAllVerified" class="text-xs bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-medium px-4 py-2.5 rounded-lg transition nowrap shadow-sm text-center justify-center" :class="isMobileSim ? 'w-full' : ''">
                 Позначити всі як звірені
               </button>
-              <button @click="openCloseMonthModal = true" class="text-xs bg-[#181a1b] hover:bg-black text-white font-bold px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 shadow-sm nowrap text-center">
+              <button @click="openCloseMonthModal = true" class="text-xs bg-[#181a1b] hover:bg-black text-white font-bold px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 shadow-sm nowrap text-center" :class="isMobileSim ? 'w-full' : ''">
                 <i class="fa-solid fa-lock text-xs text-[#ED5919]"></i> Закрити місяць та зафіксувати
               </button>
             </div>
@@ -202,25 +199,25 @@
         <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm overflow-hidden flex-1" :class="isMobileSim ? 'mx-4 mb-4' : ''">
           
           <!-- Filters & Search Toolbar -->
-          <div class="p-3.5 border-b border-slate-200 bg-[#fafafa] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="p-3.5 border-b border-slate-200 bg-[#fafafa]" :class="isMobileSim ? 'flex flex-col gap-2.5' : 'flex flex-col sm:flex-row sm:items-center justify-between gap-3'">
             
-            <!-- Filter Tabs (Horizontal scroll on mobile) -->
-            <div class="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar py-0.5">
-              <button @click="filter = 'all'" :class="filter === 'all' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'" class="px-3 py-1.5 rounded-lg transition nowrap">
+            <!-- Filter Tabs -->
+            <div :class="isMobileSim ? 'grid grid-cols-3 gap-1.5 w-full' : 'flex items-center gap-2 text-xs'">
+              <button @click="filter = 'all'" :class="[filter === 'all' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200', isMobileSim ? 'py-2 px-1 text-center text-xs' : 'px-3 py-1.5 text-xs']" class="rounded-lg transition nowrap">
                 Всі ({{ orders.length }})
               </button>
-              <button @click="filter = 'unverified'" :class="filter === 'unverified' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'" class="px-3 py-1.5 rounded-lg transition nowrap">
+              <button @click="filter = 'unverified'" :class="[filter === 'unverified' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200', isMobileSim ? 'py-2 px-1 text-center text-xs' : 'px-3 py-1.5 text-xs']" class="rounded-lg transition nowrap">
                 Не звірені ({{ unverifiedCount }})
               </button>
-              <button @click="filter = 'verified'" :class="filter === 'verified' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'" class="px-3 py-1.5 rounded-lg transition nowrap">
+              <button @click="filter = 'verified'" :class="[filter === 'verified' ? 'bg-[#ED5919] text-white font-semibold shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200', isMobileSim ? 'py-2 px-1 text-center text-xs' : 'px-3 py-1.5 text-xs']" class="rounded-lg transition nowrap">
                 Звірені ({{ verifiedCount }})
               </button>
             </div>
 
             <!-- Search input -->
-            <div class="relative text-xs w-full sm:w-auto">
-              <input v-model="search" type="text" placeholder="Пошук замовлення, товару, ТТН..." class="bg-white border border-slate-300 rounded-lg px-3 py-1.5 pl-8 w-full sm:w-72 focus:outline-none focus:border-[#ED5919] text-xs shadow-sm">
-              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400"></i>
+            <div class="relative text-xs" :class="isMobileSim ? 'w-full' : 'w-full sm:w-auto'">
+              <input v-model="search" type="text" placeholder="Пошук замовлення, товару, ТТН..." class="bg-white border border-slate-300 rounded-lg px-3 py-2 pl-8 focus:outline-none focus:border-[#ED5919] text-xs shadow-sm" :class="isMobileSim ? 'w-full' : 'w-72'">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400"></i>
             </div>
 
           </div>
